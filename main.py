@@ -113,6 +113,36 @@ def ticket_search():
 
             print("Checkbox clicked.")
 
+            try:
+                # Get the text from the element with XPath
+                date_text = driver.find_element(By.XPATH,
+                                                "/html/body/main/div/div[2]/form/div[1]/div/table/tbody/tr[2]/td[1]/p/span[1]").text
+                #if "¥22,800" not in date_text:
+                if "¥22,800" in date_text or "¥30,000" in date_text:
+                    # print("Ticket IS SS or SS")
+                    pass
+                else:
+                    print("Ticket price is not S or SS")
+                    driver.back()  # Go back to the previous page
+                    time.sleep(1)
+                    paused = False
+                    return False
+            except NoSuchElementException:
+                pass  # Handle the case when the element is not found or other exceptions
+
+            try:
+                # Get the text from the element with XPath
+                date_text = driver.find_element(By.XPATH,
+                                                "/html/body/main/div/div[1]/div/div/div/p[4]/span[1]").text
+                if "2024/02/09" in date_text:
+                    print("Ticket Has Wrong Date 2/9")
+                    driver.back()  # Go back to the previous page
+                    time.sleep(1)
+                    paused = False
+                    return False
+            except NoSuchElementException:
+                pass  # Handle the case when the element is not found or other exceptions
+
             # Check if the page contains specific text indicating the ticket is being used by another customer
             if "Another customer is in the process of purchasing" in driver.page_source:
                 print("Ticket in use by other customer.")
@@ -147,7 +177,7 @@ def ticket_search():
 driver.get("https://store.anypass.jp/resale-list")
 
 # Wait for 60 seconds before starting the loop
-time.sleep(60)
+time.sleep(20)
 
 paused = False  # Flag to track if the script is paused
 
